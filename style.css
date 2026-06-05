@@ -27,6 +27,17 @@ canvas {
   font-weight: 700;
 }
 
+#time {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  font-size: 16px;
+  font-weight: 700;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.22);
+}
+
 #instructions {
   position: absolute;
   top: 42px;

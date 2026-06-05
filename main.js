@@ -43,6 +43,60 @@ scene.add(ambient);
 const sun = new THREE.DirectionalLight(0xffffff, 1.0);
 sun.position.set(8, 20, 10);
 scene.add(sun);
+const moon = new THREE.DirectionalLight(0x8ab4ff, 0.15);
+moon.position.set(-8, -10, -8);
+scene.add(moon);
+
+const stars = new THREE.Points(
+  new THREE.BufferGeometry(),
+  new THREE.PointsMaterial({ color: 0xffffff, size: 0.15, transparent: true, opacity: 0 })
+);
+const starPositions = [];
+for (let i = 0; i < 200; i++) {
+  starPositions.push((Math.random() - 0.5) * 140);
+  starPositions.push(18 + Math.random() * 30);
+  starPositions.push((Math.random() - 0.5) * 140);
+}
+stars.geometry.setAttribute('position', new THREE.Float32BufferAttribute(starPositions, 3));
+scene.add(stars);
+
+const timeLabel = document.getElementById('time');
+const dayCycleLength = 120;
+function updateSky(timeSeconds) {
+  const cycle = (timeSeconds % dayCycleLength) / dayCycleLength;
+  const sunAngle = cycle * Math.PI * 2 - Math.PI / 2;
+  const daylight = Math.max(0, Math.sin(sunAngle));
+  const night = 1 - daylight;
+
+  const dayColor = new THREE.Color(0x87ceeb);
+  const duskColor = new THREE.Color(0xff9a6b);
+  const nightColor = new THREE.Color(0x09111f);
+
+  const skyColor = dayColor.clone().multiplyScalar(daylight)
+    .add(duskColor.clone().multiplyScalar(Math.max(0, Math.sin(sunAngle + Math.PI * 0.5)) * 0.25))
+    .add(nightColor.clone().multiplyScalar(night * 0.9));
+
+  scene.background.copy(skyColor);
+  scene.fog.color.copy(skyColor);
+
+  ambient.intensity = 0.18 + daylight * 0.72;
+  ambient.color.setHex(night > 0.5 ? 0x9fb8ff : 0xffffff);
+
+  sun.intensity = daylight * 1.2;
+  sun.color.setHex(daylight > 0.5 ? 0xffffff : 0xffe2b8);
+  sun.position.set(Math.cos(sunAngle) * 25, Math.sin(sunAngle) * 20 + 8, 12);
+
+  moon.intensity = night * 0.55;
+  moon.position.set(-Math.cos(sunAngle) * 25, -Math.sin(sunAngle) * 20 - 8, -12);
+
+  stars.material.opacity = night * 0.9;
+  stars.visible = night > 0.02;
+
+  timeLabel.textContent = daylight > 0.5 ? 'Day' : 'Night';
+  timeLabel.style.background = daylight > 0.5
+    ? 'rgba(0, 0, 0, 0.22)'
+    : 'rgba(10, 15, 25, 0.45)';
+}
 
 const blockGeometry = new THREE.BoxGeometry(1, 1, 1);
 const blockMeshes = new Map();
@@ -281,6 +335,7 @@ function animate(now) {
   const dt = Math.min((now - lastTime) / 1000, 0.033);
   lastTime = now;
 
+  updateSky(now / 1000);
   if (pointerLocked) updateMovement(dt);
 
   renderer.render(scene, camera);
