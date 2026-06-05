@@ -12,7 +12,7 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 document.body.appendChild(renderer.domElement);
 
 const controls = new PointerLockControls(camera, renderer.domElement);
-scene.add(controls.getObject());
+scene.add(controls.object);
 
 const uiMessage = document.getElementById('message');
 const hotbar = document.getElementById('hotbar');
@@ -107,7 +107,7 @@ const player = {
   height: 1.8,
   halfWidth: 0.3,
 };
-controls.getObject().position.set(0, 4, 8);
+controls.object.position.set(0, 4, 8);
 
 const keys = new Set();
 let pointerLocked = false;
@@ -181,7 +181,7 @@ function resolveAxis(eyePos, axis, delta) {
 
 function canPlaceAt(x, y, z) {
   if (hasBlock(x, y, z)) return false;
-  const testEye = controls.getObject().position.clone();
+  const testEye = controls.object.position.clone();
   const testMesh = new THREE.Mesh(blockGeometry, new THREE.MeshBasicMaterial());
   testMesh.position.set(x, y, z);
   const result = !overlapsPlayer(testEye, testMesh);
@@ -244,7 +244,7 @@ window.addEventListener('keydown', (e) => {
 window.addEventListener('keyup', (e) => keys.delete(e.code));
 
 function updateMovement(dt) {
-  const eyePos = controls.getObject().position;
+  const eyePos = controls.object.position;
   const moveSpeed = (keys.has('ShiftLeft') || keys.has('ShiftRight') ? 8 : 4) * dt;
   const forward = Number(keys.has('KeyW')) - Number(keys.has('KeyS'));
   const sideways = Number(keys.has('KeyD')) - Number(keys.has('KeyA'));
