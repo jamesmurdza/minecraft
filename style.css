@@ -1,0 +1,84 @@
+html, body {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #87ceeb;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+canvas {
+  display: block;
+}
+
+#ui {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  color: white;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.75);
+}
+
+#title {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+#instructions {
+  position: absolute;
+  top: 42px;
+  left: 14px;
+  font-size: 13px;
+  line-height: 1.5;
+  opacity: 0.95;
+}
+
+#message {
+  position: absolute;
+  left: 50%;
+  bottom: 18px;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.35);
+  padding: 8px 12px;
+  border-radius: 999px;
+  font-size: 14px;
+}
+
+#crosshair {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -52%);
+  font-size: 26px;
+  font-weight: 300;
+}
+
+#hotbar {
+  position: absolute;
+  left: 50%;
+  bottom: 52px;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+}
+
+.slot {
+  width: 48px;
+  height: 48px;
+  border: 2px solid rgba(255, 255, 255, 0.45);
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.18);
+  display: grid;
+  place-items: center;
+  font-size: 11px;
+  text-align: center;
+  backdrop-filter: blur(4px);
+}
+
+.slot.selected {
+  border-color: white;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.25) inset;
+}
